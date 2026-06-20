@@ -3,7 +3,6 @@
 > *"Do not try to fit the prompt into the context window. That's impossible.
 > Instead, only try to realize the truth... there is no context window."*
 
-**Paper:** [Zero Token Prefill](Zero_Token_Prefill.pdf)
 
 ## The Core Idea
 
