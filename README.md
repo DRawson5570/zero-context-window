@@ -5,8 +5,8 @@ compiled into gated FFN neurons that fire when relevant. The context
 window holds only the current question. The model knows the conversation
 because it is in the FFN, not the KV cache.
 
-**Proven:** 32/32 conversation turns recalled from FFN on Qwen 7B 4-bit.
-Zero degradation as context grows. Zero KV cache for history.
+**Proven:** 256 conversation turns recalled from FFN on Qwen 7B 4-bit.
+92.6% accuracy. O(1) execution speed. Zero KV cache for history.
 Zero attention over prior turns. Zero gradient descent.
 
 ## How It Works
@@ -27,20 +27,36 @@ it. The context window is genuinely zero for stored knowledge.
 
 ## Proven Results
 
-| Scale | Result | Hardware |
-|---|---|---|
-| 8 conversation turns | **8/8 perfect** | RTX 3080, Qwen 7B 4-bit |
-| 16 conversation turns | **16/16 perfect** | RTX 3080, Qwen 7B 4-bit |
-| 32 conversation turns | **32/32 perfect** | RTX 3080, Qwen 7B 4-bit |
-| 64 conversation turns | **58/64 (90.6%)** | RTX 3080, Qwen 7B 4-bit |
-| 128 conversation turns | **117/128 (91.4%)** | RTX 3080, Qwen 7B 4-bit |
-| 256 conversation turns | **237/256 (92.6%)** | RTX 3080, Qwen 7B 4-bit |
-| 8-turn rich narrative | **40/41 (97.6%)** | RTX 3080, Qwen 7B 4-bit |
-| Execution speed | **flat 0.9 q/s** | O(1) — no degradation at scale |
+### FFN Gated Conversation (Path B)
 
-| Other Capabilities | Result |
+| Scale | Result | Accuracy |
+|---|---|---|
+| 8 conversation turns | **8/8** | 100% |
+| 16 conversation turns | **16/16** | 100% |
+| 32 conversation turns | **32/32** | 100% |
+| 64 conversation turns | **58/64** | 90.6% |
+| 128 conversation turns | **117/128** | 91.4% |
+| 256 conversation turns | **237/256** | 92.6% |
+| Execution speed (all scales) | **flat 0.9 q/s** | O(1) — zero degradation |
+
+### Narrative Content (Deepwell Chronicles)
+
+An 8-turn story (~1,300 tokens) containing 41 verifiable facts — character
+names, specific numbers, places, dates, technical details. Each fact
+compiled into a gated FFN neuron and queried individually.
+
+| Metric | Result |
 |---|---|
-| Trigger-aware reading ([READ:]) | Model reads files on demand, found SECRET=42 |
+| Facts recalled | **40/41 (97.6%)** |
+| Story turns | 8 |
+| Total facts | 41 |
+| Only miss | Alphanumeric code "QW-7" (BPE tokenization edge case) |
+
+### Other Capabilities
+
+| Capability | Result |
+|---|---|
+| Trigger-aware file reading | Model emits `[READ:path]`, system compiles file into KV cache. Tested: model read a Python source file on demand, correctly identified functions and variable values |
 | Pre-compiled KV states (Path A) | 33.3 tok/s on 35B MoE, state save/restore 0.3s |
 | RoPE de-rotation | Order-independent KV composition, 42/42 tests |
 | HumanEval (thought injection) | 97.0% on 7B, zero training |
