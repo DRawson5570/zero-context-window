@@ -3,6 +3,8 @@
 > *"Do not try to fit the prompt into the context window. That's impossible.
 > Instead, only try to realize the truth... there is no context window."*
 
+**Paper:** [Zero Token Prefill](Zero_Token_Prefill.pdf)
+
 The transformer cannot distinguish between KV states built from live attention
 and KV states loaded from pre-computed storage. Content is compiled via a
 forward pass into persistent KV states. The model wakes up already knowing
