@@ -135,8 +135,18 @@ Scaling: ~100 facts = trivial. ~100K facts = pair with semantic router
 (CPU index selects top-10 relevant facts, only those neurons loaded to
 GPU per query).
 
-**NOT YET PROVEN.** The math is exact. The mechanism is designed. It has
-not been implemented and tested on a real model. This is the next build.
+**PROVEN (2026-06-20).** W_lm sequential injection at FFN output, multi-layer:
+
+- 7B 4-bit (Qwen 2.5): layers 26-27, alpha=50 → **3/3 exact**
+  ("Velnis Krath Oppen" — all fictional names recalled perfectly)
+- 1.5B float16: layers 14-27, alpha=8 → **3/3 exact**
+- On 4-bit: inject at late layers (26-27) to minimize quantization noise
+- On float16: any fact-band layer works (14+)
+- Zero gradient descent. Zero fine-tuning. Pure weight-space injection.
+
+The dynamic FFN branch is strictly additive. Base weights never modified.
+Parallel branch adds output to residual stream. Full SwiGLU expansion
+with per-fact gating is the next scale-up.
 
 **Proven results:**
 - 820M steered backbone: PPL 36.9 (below oracle ceiling of 69.7)
