@@ -32,8 +32,11 @@ it. The context window is genuinely zero for stored knowledge.
 | 8 conversation turns | **8/8 perfect** | RTX 3080, Qwen 7B 4-bit |
 | 16 conversation turns | **16/16 perfect** | RTX 3080, Qwen 7B 4-bit |
 | 32 conversation turns | **32/32 perfect** | RTX 3080, Qwen 7B 4-bit |
-| 3/3 exact token recall | **Velnis Krath Oppen** | L26-27, alpha=50 |
-| 3/3 on float16 | All tokens exact | L14-27, alpha=8 |
+| 64 conversation turns | **58/64 (90.6%)** | RTX 3080, Qwen 7B 4-bit |
+| 128 conversation turns | **117/128 (91.4%)** | RTX 3080, Qwen 7B 4-bit |
+| 256 conversation turns | **237/256 (92.6%)** | RTX 3080, Qwen 7B 4-bit |
+| 8-turn rich narrative | **40/41 (97.6%)** | RTX 3080, Qwen 7B 4-bit |
+| Execution speed | **flat 0.9 q/s** | O(1) — no degradation at scale |
 
 | Other Capabilities | Result |
 |---|---|
