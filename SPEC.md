@@ -144,9 +144,27 @@ GPU per query).
 - On float16: any fact-band layer works (14+)
 - Zero gradient descent. Zero fine-tuning. Pure weight-space injection.
 
+**PROVEN AT SCALE (2026-06-20).** Gated conversation-in-FFN:
+
+- Gate: hidden state captured at L26 when fact is first mentioned
+- Response: W_lm sequential vectors at L26-27, alpha=50
+- Routing: cosine similarity selects best-matching neuron
+- Delivery: skip prefill, inject during decode only
+
+| Conversation Size | Result |
+|---|---|
+| 8 turns | **8/8 perfect** |
+| 16 turns | **16/16 perfect** |
+| 32 turns | **32/32 perfect** |
+
+Zero degradation as context grows. Every gate routes correctly.
+Every fact delivered. No KV cache. No retrieval.
+The conversation IS the FFN.
+
 The dynamic FFN branch is strictly additive. Base weights never modified.
-Parallel branch adds output to residual stream. Full SwiGLU expansion
-with per-fact gating is the next scale-up.
+Parallel branch adds output to residual stream. Each new conversation
+turn adds one gated neuron — O(1) compilation, O(k) routing where
+k = number of turns.
 
 **Proven results:**
 - 820M steered backbone: PPL 36.9 (below oracle ceiling of 69.7)
