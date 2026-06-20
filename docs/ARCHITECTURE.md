@@ -1,4 +1,4 @@
-# Architecture — State-Modular Neural Runtime
+# Architecture — Zero Context Window
 
 > Two paths, one system. The model knows what it needs to, when it needs to.
 
